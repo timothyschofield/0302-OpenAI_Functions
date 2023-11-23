@@ -5,6 +5,10 @@ OpenAI_Functions.py
 
 https://platform.openai.com/docs/guides/function-calling
 
+Here the model needs to use API calls to determine the weather. The model determines this. The model requests tool_calls.
+We assemble the calls and make them, and then feed back the responce 
+to a second stage chat.completion, which handles the NLP final output.
+
 """
 
 from openai import OpenAI
@@ -80,7 +84,7 @@ def run_conversation():
 
         messages.append(response_message)  # extend conversation with assistant's reply
 
-        # Assemble each function call described in output of Stage 1
+        # Assemble each function call described Stage 1 output and call function
         for tool_call in tool_calls:
 
             function_name = tool_call.function.name
@@ -109,7 +113,7 @@ def run_conversation():
             messages=messages,
         )
 
-        return second_response  # return Stage 2
+        return second_response  # return Stage 2 response
     
 
 stage2_results = run_conversation()
